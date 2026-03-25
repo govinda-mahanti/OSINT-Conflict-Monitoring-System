@@ -11,8 +11,4 @@ def is_relevant_conflict(text):
         "houthi", "navy", "military"
     ]
 
-    for keyword in keywords:
-        if keyword in text:
-            return True
-
-    return False
+    return any(keyword in text for keyword in keywords)

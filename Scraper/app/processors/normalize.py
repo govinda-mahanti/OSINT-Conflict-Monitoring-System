@@ -1,12 +1,9 @@
 import dateparser
 
 def normalize_event(event):
-    # Use title or summary as claim_text
     claim_text = event.get("title") or event.get("summary") or ""
-
     text = claim_text.lower()
 
-    # Simple keyword classification
     if "airstrike" in text or "bomb" in text:
         event_type = "airstrike"
     elif "protest" in text or "riot" in text:
