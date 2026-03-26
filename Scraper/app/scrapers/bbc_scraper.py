@@ -18,4 +18,4 @@ def scrape_bbc():
         })
 
     print(f"Scraped {len(articles)} articles from BBC")
-    return articles[:10]
+    return articles

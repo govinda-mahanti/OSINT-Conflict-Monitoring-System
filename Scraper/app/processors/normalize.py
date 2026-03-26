@@ -1,4 +1,5 @@
 import dateparser
+from datetime import UTC
 
 def normalize_event(event):
     claim_text = event.get("title") or event.get("summary") or ""
@@ -13,12 +14,17 @@ def normalize_event(event):
     else:
         event_type = "conflict"
 
+    parsed_date = dateparser.parse(event.get("date", ""))
+
+    if parsed_date and parsed_date.tzinfo is None:
+        parsed_date = parsed_date.replace(tzinfo=UTC)
+
     normalized = {
         "claim_text": claim_text,
         "source": event.get("source"),
         "source_type": event.get("source_type", "news"),
         "event_type": event_type,
-        "date": str(dateparser.parse(event.get("date", ""))) if event.get("date") else "",
+        "date": str(parsed_date) if parsed_date else "",
         "location": "unknown",
         "link": event.get("link")
     }

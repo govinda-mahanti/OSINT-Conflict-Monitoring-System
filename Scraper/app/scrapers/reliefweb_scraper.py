@@ -25,4 +25,5 @@ def scrape_reliefweb():
         })
 
     print(f"Scraped {len(articles)} articles from ReliefWeb")
-    return articles[:10]
+   
+    return articles

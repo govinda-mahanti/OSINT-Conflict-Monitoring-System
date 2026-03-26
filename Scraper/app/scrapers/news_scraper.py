@@ -22,7 +22,8 @@ def scrape_newsapi():
                 })
 
         print(f"Scraped {len(articles)} articles from NewsAPI")
-        return articles[:10]
+        
+        return articles
 
     except Exception as e:
         print("Error scraping NewsAPI:", e)

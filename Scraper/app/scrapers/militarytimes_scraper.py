@@ -18,4 +18,5 @@ def scrape_military_times():
         })
 
     print(f"Scraped {len(articles)} articles from Military Times")
-    return articles[:10]
+    
+    return articles

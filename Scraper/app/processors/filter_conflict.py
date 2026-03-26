@@ -1,14 +1,30 @@
 def is_relevant_conflict(text):
     text = text.lower()
 
-    keywords = [
-        "iran", "israel", "gaza", "hamas", "hezbollah",
-        "idf", "iranian", "tehran", "tel aviv",
-        "us", "u.s.", "united states", "pentagon",
-        "missile", "airstrike", "drone",
-        "war", "conflict", "attack",
-        "syria", "iraq", "yemen", "red sea",
-        "houthi", "navy", "military"
+    conflict_keywords = [
+        # Countries
+        "iran", "israel", "gaza", "syria", "iraq", "yemen", "lebanon",
+
+        # Groups
+        "hamas", "hezbollah", "houthi",
+
+        # Cities
+        "tehran", "tel aviv", "jerusalem",
+
+        # Military terms
+        "airstrike", "missile", "drone", "attack", "strike",
+        "military", "navy", "war", "conflict",
+
+        # US involvement
+        "pentagon", "centcom", "u.s. military", "us airstrike"
     ]
 
-    return any(keyword in text for keyword in keywords)
+    # Region filter
+    region_keywords = [
+        "iran", "israel", "gaza", "syria", "iraq", "yemen", "lebanon"
+    ]
+
+    has_conflict = any(word in text for word in conflict_keywords)
+    has_region = any(word in text for word in region_keywords)
+
+    return has_conflict and has_region
