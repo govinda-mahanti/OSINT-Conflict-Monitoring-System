@@ -1,9 +1,20 @@
-import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const App = () => {
+
+import DashLayout from "./Dashboard/DashLayout";
+import Dashboard from "./Dashboard/Dashboard";
+
+function App() {
   return (
-    <div>App</div>
-  )
+    <Router>
+      <Routes>
+          <Route path="/" element={<DashLayout />}>
+            <Route index element={<Dashboard />} />
+         
+          </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
