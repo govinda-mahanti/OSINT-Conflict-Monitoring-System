@@ -52,19 +52,15 @@ export const getEventCoordinates = async (req, res) => {
       .sort({ event_datetime_utc: -1 })
       .limit(100);
 
-    const result = [];
-
-    for (const event of events) {
-      // Only events with valid location
+    const promises = events.map(async (event) => {
       if (!event.location || event.location.toLowerCase() === "unknown") {
-        continue;
+        return null;
       }
 
       const coords = await getCoordinates(event.location, event.defender);
 
-      // Only send if coordinates found
       if (coords.latitude && coords.longitude) {
-        result.push({
+        return {
           event_id: event._id,
           country: event.country,
           location: event.location,
@@ -79,10 +75,13 @@ export const getEventCoordinates = async (req, res) => {
           confidence_score: event.confidence_score,
           latitude: coords.latitude,
           longitude: coords.longitude,
-        });
+        };
       }
-    }
 
+      return null;
+    });
+
+    const result = (await Promise.all(promises)).filter(Boolean);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
