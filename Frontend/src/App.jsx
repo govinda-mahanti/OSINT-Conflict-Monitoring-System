@@ -6,7 +6,6 @@ import Dashboard from "./Dashboard/Dashboard";
 import ExecutiveSummary from "./Dashboard/ExecutiveSummary";
 import EventFeed from "./Dashboard/EventFeed";
 import MapView from "./Dashboard/MapView";
-import TrendsAnalysis from "./Dashboard/TrendsAnalysis";
 
 function App() {
   return (
