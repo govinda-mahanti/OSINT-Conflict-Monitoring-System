@@ -81,7 +81,7 @@ def run_pipeline():
             continue
         dedup_pass += 1
 
-        # AI Extraction (SEND FULL TEXT)
+        # AI Extraction
         ai_event = extract_event_ai(
             text=full_text,
             source=normalized["source"],
@@ -106,10 +106,33 @@ def run_pipeline():
         ai_event["attacker"] = normalize_actors(ai_event.get("attacker"))
         ai_event["defender"] = normalize_actors(ai_event.get("defender"))
 
+        # ================= UPDATED SCORING =================
+        fatalities = ai_event.get("fatalities", 0)
+        injuries = ai_event.get("injuries", 0)
+        target_type = ai_event.get("target_type")
+        weapon_type = ai_event.get("weapon_type")
 
-        # Scoring
-        ai_event["severity_score"] = severity_score(ai_event["event_type"])
-        ai_event["confidence_score"] = confidence_score(ai_event["source_type"])
+        # Severity
+        ai_event["severity_score"] = severity_score(
+            event_type=ai_event.get("event_type"),
+            fatalities=fatalities,
+            injuries=injuries,
+            target_type=target_type,
+            weapon_type=weapon_type
+        )
+
+        # Count similar reports
+        report_count = sum(
+            1 for e in existing_events
+            if e.get("location_text") == ai_event.get("location_text")
+            and e.get("event_type") == ai_event.get("event_type")
+        )
+
+        # Confidence
+        ai_event["confidence_score"] = confidence_score(
+            source_type=ai_event.get("source_type"),
+            report_count=report_count
+        )
 
         # Timestamps
         ai_event["event_datetime_utc"] = normalized["date"]

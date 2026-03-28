@@ -8,7 +8,11 @@ import time
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+keys = [
+    os.getenv("GROQ_API_KEY_1"),
+    os.getenv("GROQ_API_KEY_2"),
+    os.getenv("GROQ_API_KEY_3")
+]
 
 
 def extract_json(text):
@@ -74,40 +78,64 @@ Rules:
 - target_type = military / civilian / infrastructure / government
 - fatalities & injuries = numbers if mentioned, else 0
 - tags = short keywords
-- location = Extract the most specific attacked place mentioned (building/base/airport/school/hospital → else city → else district/region/country → else country → else "unknown").
+- location = Extract the most specific attacked place mentioned using this priority order:
+        1. Exact building or facility attacked (airport, airbase, military base, school, hospital, embassy, power plant, nuclear facility, oil refinery, port, headquarters)
+        2. Named military site or infrastructure (airbase name, base name, facility name)
+        3. City (Tehran, Gaza City, Damascus, Baghdad, Tel Aviv)
+        4. District / Region (southern Gaza, northern Israel, West Bank, Red Sea, Persian Gulf)
+        5. Country (Iran, Israel, Lebanon, etc.)
+        6. If only general area mentioned (e.g., "Middle East", "border area", "sea") → use that area name
+        7. If no location mentioned → "unknown"
 - If not conflict related, return empty JSON {{}}.
 
 Text:
 {text}
 """
 
-
     for attempt in range(3):
         try:
             time.sleep(2)
 
-            response = requests.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {GROQ_API_KEY}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "llama-3.3-70b-versatile",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.1
-                },
-                timeout=30
-            )
+            response = None
+            result = None
 
-            result = response.json()
+            for key_index, key in enumerate(keys):
+                try:
+                    # print(f"Trying Groq API Key {key_index+1}")
+                    time.sleep(2 + key_index * 2)
 
-            if "error" in result:
-                print("Groq API Error:", result)
-                if "rate_limit" in str(result):
-                    print("Waiting due to rate limit...")
-                    time.sleep(5)
+                    response = requests.post(
+                        "https://api.groq.com/openai/v1/chat/completions",
+                        headers={
+                            "Authorization": f"Bearer {key}",
+                            "Content-Type": "application/json"
+                        },
+                        json={
+                            "model": "llama-3.1-8b-instant",
+                            "messages": [{"role": "user", "content": prompt}],
+                            "temperature": 0.1
+                        },
+                        timeout=30
+                    )
+
+                    result = response.json()
+
+                    if "error" in result:
+                        print("Groq API Error:", result)
+                        if "rate_limit" in str(result):
+                            print("Rate limit → switching key...")
+                            continue
+                        else:
+                            return None
+
+                    # success
+                    break
+
+                except Exception as e:
+                    print("API Key failed:", e)
                     continue
+
+            if result is None:
                 return None
 
             if "choices" not in result:
@@ -118,8 +146,6 @@ Text:
 
             if not data or data == {}:
                 return None
-
-           
 
             # Final schema
             final_event = {
