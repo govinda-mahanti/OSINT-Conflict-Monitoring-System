@@ -25,29 +25,16 @@ def extract_json(text):
     return None
 
 
-def calculate_severity(data):
-    """Simple severity scoring logic"""
-    severity = 1
-
-    if data.get("fatalities", 0) > 0:
-        severity += 3
-
-    if data.get("weapon_type") in ["missile", "airstrike", "drone"]:
-        severity += 2
-
-    if data.get("target_type") == "civilian":
-        severity += 2
-
-    if data.get("event_type") in ["airstrike", "missile"]:
-        severity += 1
-
-    return min(severity, 10)
-
-
-def calculate_confidence(data):
     """Confidence score based on filled fields"""
     score = 0
-    fields = ["country", "location_text", "attacker", "defender", "event_type", "weapon_type"]
+    fields = [
+        "country",
+        "location",
+        "attacker",
+        "defender",
+        "event_type",
+        "weapon_type"
+    ]
 
     for field in fields:
         if data.get(field) and data.get(field) != "unknown":
@@ -58,20 +45,17 @@ def calculate_confidence(data):
 
 def extract_event_ai(text, source, url, date):
     prompt = f"""
-You are an OSINT analyst. Extract structured conflict event data ONLY related to Iran, Israel, Gaza, Syria, Iraq, Yemen, Lebanon conflicts.
+Extract conflict event data from the text.
 
-Text:
-{text}
-
-Return ONLY JSON in this format:
+Return JSON only:
 
 {{
   "country": "",
-  "location_text": "",
+  "location": "",
   "attacker": "",
   "defender": "",
   "event_type": "",
-  "domain": "",
+  "domain": "military",
   "weapon_type": "",
   "target_type": "",
   "fatalities": 0,
@@ -80,14 +64,23 @@ Return ONLY JSON in this format:
 }}
 
 Rules:
+- Countries: Iran, Israel, Gaza, Syria, Iraq, Yemen, Lebanon, United States
+- event_type: airstrike, missile, drone, attack, naval, deployment
+- target_type: military, civilian, infrastructure, government
+- If injuries missing → injuries = fatalities
 - domain = military / political / cyber
 - event_type = airstrike / attack / drone / missile / conflict / deployment / naval
 - weapon_type = drone / missile / artillery / airstrike / gunfire / naval / cyber
 - target_type = military / civilian / infrastructure / government
 - fatalities & injuries = numbers if mentioned, else 0
 - tags = short keywords
+- location = Extract the most specific attacked place mentioned (building/base/airport/school/hospital → else city → else district/region/country → else country → else "unknown").
 - If not conflict related, return empty JSON {{}}.
+
+Text:
+{text}
 """
+
 
     for attempt in range(3):
         try:
@@ -126,9 +119,7 @@ Rules:
             if not data or data == {}:
                 return None
 
-            # Calculate scores
-            severity_score = calculate_severity(data)
-            confidence_score = calculate_confidence(data)
+           
 
             # Final schema
             final_event = {
@@ -137,18 +128,24 @@ Rules:
                 "source_url": url,
                 "source_type": "news",
                 "claim_text": text,
+
                 "country": data.get("country", "unknown"),
-                "location_text": data.get("location_text", "unknown"),
+                "location": data.get("location", "unknown"),
+
                 "attacker": data.get("attacker", "unknown"),
                 "defender": data.get("defender", "unknown"),
+
                 "event_type": data.get("event_type", "conflict"),
                 "domain": data.get("domain", "military"),
                 "weapon_type": data.get("weapon_type", "unknown"),
                 "target_type": data.get("target_type", "unknown"),
+
                 "fatalities": data.get("fatalities", 0),
                 "injuries": data.get("injuries", 0),
-                "severity_score": severity_score,
-                "confidence_score": confidence_score,
+
+                "severity_score": 0,
+                "confidence_score": 0,
+
                 "tags": data.get("tags", []),
                 "last_updated_at": str(datetime.now(UTC))
             }

@@ -23,6 +23,7 @@ from app.processors.ai_extractor import extract_event_ai
 from app.processors.scoring import severity_score, confidence_score
 from app.processors.date_filter import filter_recent_articles
 from app.processors.country_normalizer import normalize_country
+from app.processors.actor_normalizer import normalize_actors
 
 
 def run_pipeline():
@@ -100,6 +101,11 @@ def run_pipeline():
         if ai_event["country"] not in allowed_countries:
             continue
         country_pass += 1
+
+        # Normalize actors
+        ai_event["attacker"] = normalize_actors(ai_event.get("attacker"))
+        ai_event["defender"] = normalize_actors(ai_event.get("defender"))
+
 
         # Scoring
         ai_event["severity_score"] = severity_score(ai_event["event_type"])
