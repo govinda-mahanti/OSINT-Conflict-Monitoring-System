@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import { BASE_URL } from "../Config/urlConfig.js";
+
 
 const MapView = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/events/coordinates")
+    fetch(`${BASE_URL}/api/events/coordinates`)
       .then((res) => res.json())
       .then((data) => setEvents(data));
   }, []);
