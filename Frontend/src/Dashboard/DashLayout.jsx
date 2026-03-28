@@ -38,13 +38,12 @@ const DashLayout = () => {
   }, []);
 
   const navItems = [
-    { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={17} />, badge: null },
-    { label: "Intel Feed", path: "/dashboard/intel", icon: <RadioTower size={17} />, badge: "4" },
+    { label: "Dashboard", path: "/", icon: <LayoutDashboard size={17} />, badge: null },
+    { label: "Intel Feed", path: "/executive-summary", icon: <RadioTower size={17} />, },
     { label: "Events", path: "/event-feed", icon: <Swords size={17} />, badge: null },
-    { label: "Threat Map", path: "/dashboard/map", icon: <Map size={17} />, badge: null },
-    { label: "Analytics", path: "/dashboard/analytics", icon: <BarChart3 size={17} />, badge: null },
-    { label: "Alerts", path: "/dashboard/alerts", icon: <Bell size={17} />, badge: "3" },
-    { label: "AI Reports", path: "/dashboard/advisor", icon: <Bot size={17} />, badge: null },
+    { label: "Threat Map", path: "/map-view", icon: <Map size={17} />, badge: null },
+    { label: "Analytics", path: "/trends-analysis", icon: <BarChart3 size={17} />, badge: null },
+   
   ];
 
   const isActive = (path) => location.pathname === path;

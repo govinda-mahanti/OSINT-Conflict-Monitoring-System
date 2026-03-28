@@ -1,6 +1,7 @@
 import express from "express";
-import {getEvents} from "../controllers/eventsController.js";
+import {getEvents, getEventCoordinates } from "../controllers/eventsController.js";
 const router = express.Router();
 
 router.get("/", getEvents);
+router.get("/coordinates", getEventCoordinates);
 export default router;

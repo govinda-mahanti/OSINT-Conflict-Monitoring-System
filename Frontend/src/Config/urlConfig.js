@@ -1,0 +1,1 @@
+export const BASE_URL = "https://osint-conflict-monitoring-system-1.onrender.com";
