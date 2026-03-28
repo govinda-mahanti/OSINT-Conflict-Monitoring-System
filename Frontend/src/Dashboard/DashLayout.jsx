@@ -19,8 +19,8 @@ import {
 const DashLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
-  const location  = useLocation();
-  const navigate  = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const tick = () => {
@@ -38,13 +38,13 @@ const DashLayout = () => {
   }, []);
 
   const navItems = [
-    { label: "Dashboard",  path: "/dashboard",           icon: <LayoutDashboard size={17} />, badge: null },
-    { label: "Intel Feed", path: "/dashboard/intel",     icon: <RadioTower size={17} />,      badge: "4"  },
-    { label: "Events",     path: "/dashboard/events",    icon: <Swords size={17} />,           badge: null },
-    { label: "Threat Map", path: "/dashboard/map",       icon: <Map size={17} />,              badge: null },
-    { label: "Analytics",  path: "/dashboard/analytics", icon: <BarChart3 size={17} />,        badge: null },
-    { label: "Alerts",     path: "/dashboard/alerts",    icon: <Bell size={17} />,             badge: "3"  },
-    { label: "AI Reports", path: "/dashboard/advisor",   icon: <Bot size={17} />,              badge: null },
+    { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={17} />, badge: null },
+    { label: "Intel Feed", path: "/dashboard/intel", icon: <RadioTower size={17} />, badge: "4" },
+    { label: "Events", path: "/event-feed", icon: <Swords size={17} />, badge: null },
+    { label: "Threat Map", path: "/dashboard/map", icon: <Map size={17} />, badge: null },
+    { label: "Analytics", path: "/dashboard/analytics", icon: <BarChart3 size={17} />, badge: null },
+    { label: "Alerts", path: "/dashboard/alerts", icon: <Bell size={17} />, badge: "3" },
+    { label: "AI Reports", path: "/dashboard/advisor", icon: <Bot size={17} />, badge: null },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -95,7 +95,6 @@ const DashLayout = () => {
                 </span>
               )}
 
-              {/* Active dot (no badge) */}
               {active && !item.badge && (
                 <span className="w-[5px] h-[5px] rounded-full flex-shrink-0 bg-[#ef4444] shadow-[0_0_7px_#ef4444]" />
               )}
@@ -106,25 +105,18 @@ const DashLayout = () => {
     </ul>
   );
 
-  /* ─── Logo block (shared between desktop & mobile) ───────────────────────── */
   const Logo = ({ size = "md" }) =>
     size === "md" ? (
-      /* Desktop logo */
       <div className="flex items-center gap-[11px] px-[18px] py-[20px] border-b border-[#1e2d45] mb-[18px]">
-        <div className="w-[38px] h-[38px] rounded-[10px] flex-shrink-0 flex items-center justify-center text-[18px] bg-[linear-gradient(135deg,#ef4444,#7f1d1d)] shadow-[0_0_20px_rgba(239,68,68,0.45)]">
-          ⚔
-        </div>
+
         <div>
           <p className="text-[#e2e8f0] font-extrabold text-[16px] tracking-[3px] font-mono leading-none">WAR</p>
           <p className="text-[#ef4444] font-bold text-[8px] tracking-[5px] font-mono">INTEL OPS</p>
         </div>
       </div>
     ) : (
-      /* Mobile logo */
       <div className="flex items-center gap-[10px]">
-        <div className="w-[34px] h-[34px] rounded-[9px] flex-shrink-0 flex items-center justify-center text-[16px] bg-[linear-gradient(135deg,#ef4444,#7f1d1d)] shadow-[0_0_14px_rgba(239,68,68,0.4)]">
-          ⚔
-        </div>
+
         <div>
           <p className="text-[#e2e8f0] font-extrabold text-[14px] tracking-[3px] font-mono leading-none">WAR</p>
           <p className="text-[#ef4444] text-[8px] tracking-[5px] font-mono">INTEL OPS</p>
@@ -132,13 +124,11 @@ const DashLayout = () => {
       </div>
     );
 
-  /* ─────────────────────────────────────────────────────────────────────────── */
   return (
     <div
       className="flex h-screen overflow-hidden bg-[#070b12]"
       style={{ fontFamily: "'Rajdhani','Segoe UI',monospace" }}
     >
-      {/* Keyframes + scrollbar only — no layout rules here */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
         ::-webkit-scrollbar       { width: 4px; }
@@ -151,9 +141,7 @@ const DashLayout = () => {
         .live-pulse { animation: livePulse 1.8s infinite; }
       `}</style>
 
-      {/* ══════════════════════════════════════════════════════════════
-          DESKTOP SIDEBAR  — hidden on mobile, flex on md+
-      ══════════════════════════════════════════════════════════════ */}
+      {/* DESKTOP SIDEBAR  */}
       <aside className="
         hidden md:flex
         w-[228px] flex-shrink-0
@@ -163,7 +151,6 @@ const DashLayout = () => {
         border-r border-[#1e2d45]
         relative overflow-hidden
       ">
-        {/* Corner glow */}
         <div className="
           absolute top-[-50px] left-[-50px]
           w-[180px] h-[180px] rounded-full
@@ -189,9 +176,7 @@ const DashLayout = () => {
         </div>
       </aside>
 
-      {/* ══════════════════════════════════════════════════════════════
-          MOBILE BACKDROP
-      ══════════════════════════════════════════════════════════════ */}
+      {/* MOBILE BACKDROP */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
@@ -199,9 +184,7 @@ const DashLayout = () => {
         />
       )}
 
-      {/* ══════════════════════════════════════════════════════════════
-          MOBILE DRAWER  — slides in from left
-      ══════════════════════════════════════════════════════════════ */}
+      {/* MOBILE DRAWER   */}
       <div
         className={[
           "fixed top-0 left-0 z-50",
@@ -217,7 +200,6 @@ const DashLayout = () => {
         style={{ transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)" }}
       >
         <div>
-          {/* Mobile header row */}
           <div className="
             flex items-center justify-between
             px-[16px] py-[18px]
@@ -226,7 +208,6 @@ const DashLayout = () => {
           ">
             <Logo size="sm" />
 
-            {/* Close button */}
             <button
               onClick={() => setMobileOpen(false)}
               className="
@@ -250,12 +231,10 @@ const DashLayout = () => {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════
-          MAIN AREA
-      ══════════════════════════════════════════════════════════════ */}
+      {/* MAIN AREA */}
       <div className="flex-1 flex flex-col overflow-hidden">
 
-        {/* ── TOPBAR ─────────────────────────────────────────────── */}
+        {/*  TOPBAR */}
         <header className="
           relative flex-shrink-0
           flex items-center justify-between
@@ -263,20 +242,9 @@ const DashLayout = () => {
           bg-[#0d1526]
           border-b border-[#1e2d45]
         ">
-          {/* Left group */}
           <div className="flex items-center gap-[14px]">
 
-            {/* Mobile logo text — visible only on mobile */}
-            <span className="
-              md:hidden
-              text-[#e2e8f0] font-extrabold text-[13px] font-mono tracking-[3px]
-            ">
-              ⚔ WAR INTEL
-            </span>
-
-            {/* Desktop: LIVE pill + divider + time — hidden on mobile */}
-            <div className="hidden md:flex items-center gap-[10px]">
-              {/* LIVE */}
+            <div className="flex items-center gap-[10px]">
               <div className="flex items-center gap-[6px]">
                 <span className="live-pulse inline-block w-[8px] h-[8px] rounded-full bg-[#ef4444]" />
                 <span className="text-[#ef4444] text-[10px] font-mono tracking-[3px] font-bold">
@@ -284,20 +252,16 @@ const DashLayout = () => {
                 </span>
               </div>
 
-              {/* Divider */}
               <div className="w-[1px] h-[20px] bg-[#1e2d45] mx-[6px]" />
 
-              {/* Time */}
               <span className="text-[#64748b] text-[11px] font-mono whitespace-nowrap">
                 {currentTime}
               </span>
             </div>
           </div>
 
-          {/* Right group */}
           <div className="flex items-center gap-[2px] relative">
 
-            {/* Mobile hamburger — hidden on md+ */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="
@@ -315,7 +279,7 @@ const DashLayout = () => {
           </div>
         </header>
 
-        {/* ── PAGE CONTENT ───────────────────────────────────────── */}
+        {/* PAGE CONTENT */}
         <main className="flex-1 overflow-y-auto bg-[#070b12]">
           <Outlet />
         </main>
