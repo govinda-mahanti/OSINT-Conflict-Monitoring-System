@@ -42,7 +42,6 @@ const DashLayout = () => {
     { label: "Intel Feed", path: "/executive-summary", icon: <RadioTower size={17} />, },
     { label: "Events", path: "/event-feed", icon: <Swords size={17} />, badge: null },
     { label: "Threat Map", path: "/map-view", icon: <Map size={17} />, badge: null },
-    { label: "Analytics", path: "/trends-analysis", icon: <BarChart3 size={17} />, badge: null },
    
   ];
 

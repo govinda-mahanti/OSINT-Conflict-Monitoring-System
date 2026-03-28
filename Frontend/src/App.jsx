@@ -17,7 +17,6 @@ function App() {
             <Route path="executive-summary" element={<ExecutiveSummary />} />
             <Route path="event-feed" element={<EventFeed />} />
             <Route path="map-view" element={<MapView />} />
-            <Route path="trends-analysis" element={<TrendsAnalysis />} />
           </Route>
       </Routes>
     </Router>
