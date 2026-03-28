@@ -6,9 +6,8 @@ import path from "path";
 import connectDB from "./db/db.js"
 dotenv.config();
 
-import eventsRoutes from "./routes/events.js";
-import analysisRoutes from "./routes/analysis.js";
-import summaryRoutes from "./routes/summary.js";
+import eventsRoutes from "./routes/eventsRoutes.js";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,8 +24,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/events", eventsRoutes);
-app.use("/api/analysis", analysisRoutes);
-app.use("/api/summary", summaryRoutes);
 
 const PORT=process.env.PORT || 5000
 
