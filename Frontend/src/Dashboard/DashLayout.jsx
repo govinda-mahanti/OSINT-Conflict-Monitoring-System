@@ -39,7 +39,7 @@ const DashLayout = () => {
 
   const navItems = [
     { label: "Dashboard", path: "/", icon: <LayoutDashboard size={17} />, badge: null },
-    { label: "Intel Feed", path: "/executive-summary", icon: <RadioTower size={17} />, },
+    { label: "Intel Feed", path: "/intel-feed", icon: <RadioTower size={17} />, },
     { label: "Events", path: "/event-feed", icon: <Swords size={17} />, badge: null },
     { label: "Threat Map", path: "/map-view", icon: <Map size={17} />, badge: null },
    

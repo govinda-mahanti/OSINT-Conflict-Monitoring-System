@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as d3 from "d3";
+import BASE_URL from "../Config/urlConfig"
 
-const API_URL = "https://osint-conflict-monitoring-system-1.onrender.com/api/events";
 const POLL_INTERVAL = 30000;
 
 const COLORS = {
@@ -200,7 +200,7 @@ export default function ConflictNexus() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch(API_URL);
+      const res = await fetch(`${BASE_URL}/api/events`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const arr = Array.isArray(data) ? data : data.events || data.data || [];
