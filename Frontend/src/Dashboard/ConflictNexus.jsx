@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import * as d3 from "d3";
-import BASE_URL from "../Config/urlConfig"
+import {BASE_URL} from "../Config/urlConfig"
 
 const POLL_INTERVAL = 30000;
 
