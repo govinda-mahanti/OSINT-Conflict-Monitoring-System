@@ -141,16 +141,21 @@ export default function WarDashboard() {
   };
 
   // Events Over Time Line
-  const lineData = {
-    labels: Object.keys(eventsByDate),
-    datasets: [{
-      label: "Events",
-      data: Object.values(eventsByDate),
-      borderColor: "#3b82f6",
-      backgroundColor: "#3b82f6",
-      tension: 0.3
-    }]
-  };
+  // Events Over Time Line
+const sortedDates = Object.keys(eventsByDate).sort(
+  (a, b) => new Date(a) - new Date(b)
+);
+
+const lineData = {
+  labels: sortedDates,
+  datasets: [{
+    label: "Events",
+    data: sortedDates.map(date => eventsByDate[date]),
+    borderColor: "#3b82f6",
+    backgroundColor: "#3b82f6",
+    tension: 0.3
+  }]
+};
 
   const lineOptions = {
     responsive: true,
